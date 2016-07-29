@@ -100,6 +100,8 @@ elif [ -n "$build" ]; then
     docker_pull "${repository}:${tag_name}"
   fi
 
+  echo docker build "$build_args" -t "${repository}:${tag_name}" -f "$dockerfile" "$build"
+  echo docker build "$build_args" -t "${repository}:${tag_name}" "$build"
   if [ -n "$dockerfile" ]; then
     docker build "$build_args" -t "${repository}:${tag_name}" -f "$dockerfile" "$build"
   else
