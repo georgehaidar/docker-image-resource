@@ -32,6 +32,7 @@ username=$(jq -r '.source.username // ""' < $payload)
 password=$(jq -r '.source.password // ""' < $payload)
 repository=$(jq -r '.source.repository // ""' < $payload)
 ca_certs=$(jq -r '.source.ca_certs // []' < $payload)
+build_args=$(jq -r '.source.build_args // {}|to_entries|map("--build-arg " + (.key + "=" + .value|@sh))|join(" ")' < $payload)
 
 export AWS_ACCESS_KEY_ID=$(jq -r '.source.aws_access_key_id // ""' < $payload)
 export AWS_SECRET_ACCESS_KEY=$(jq -r '.source.aws_secret_access_key // ""' < $payload)
@@ -100,9 +101,9 @@ elif [ -n "$build" ]; then
   fi
 
   if [ -n "$dockerfile" ]; then
-    docker build -t "${repository}:${tag_name}" -f "$dockerfile" "$build"
+    docker build -t "${repository}:${tag_name}" "$build_args" -f "$dockerfile" "$build"
   else
-    docker build -t "${repository}:${tag_name}" "$build"
+    docker build -t "${repository}:${tag_name}" "$build_args" "$build"
   fi
 elif [ -n "$load_file" ]; then
   if [ -n "$load_repository" ]; then
