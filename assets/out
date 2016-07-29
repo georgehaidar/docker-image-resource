@@ -101,9 +101,9 @@ elif [ -n "$build" ]; then
   fi
 
   if [ -n "$dockerfile" ]; then
-    docker build -t "${repository}:${tag_name}" "$build_args" -f "$dockerfile" "$build"
+    docker build "$build_args" -t "${repository}:${tag_name}" -f "$dockerfile" "$build"
   else
-    docker build -t "${repository}:${tag_name}" "$build_args" "$build"
+    docker build "$build_args" -t "${repository}:${tag_name}" "$build"
   fi
 elif [ -n "$load_file" ]; then
   if [ -n "$load_repository" ]; then
