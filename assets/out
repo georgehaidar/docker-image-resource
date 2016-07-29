@@ -32,7 +32,6 @@ username=$(jq -r '.source.username // ""' < $payload)
 password=$(jq -r '.source.password // ""' < $payload)
 repository=$(jq -r '.source.repository // ""' < $payload)
 ca_certs=$(jq -r '.source.ca_certs // []' < $payload)
-build_args=$(jq -r '.source.build_args // {}|to_entries|map("--build-arg " + (.key + "=" + .value|@sh))|join(" ")' < $payload)
 
 export AWS_ACCESS_KEY_ID=$(jq -r '.source.aws_access_key_id // ""' < $payload)
 export AWS_SECRET_ACCESS_KEY=$(jq -r '.source.aws_secret_access_key // ""' < $payload)
@@ -51,6 +50,7 @@ tag_source=$(jq -r '.source.tag // "latest"' < $payload)
 tag_params=$(jq -r '.params.tag // ""' < $payload)
 tag_prefix=$(jq -r '.params.tag_prefix // ""' < $payload)
 need_tag_as_latest=$(jq -r '.params.tag_as_latest // "false"' < $payload)
+build_args=$(jq -r '.params.build_args // {}|to_entries|map("--build-arg " + (.key + "=" + .value|@sh))|join(" ")' < $payload)
 
 
 tag_name=""
